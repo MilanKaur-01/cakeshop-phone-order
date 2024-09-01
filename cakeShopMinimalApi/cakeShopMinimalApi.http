@@ -1,6 +1,0 @@
-@cakeShopMinimalApi_HostAddress = http://localhost:5231
-
-GET {{cakeShopMinimalApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
