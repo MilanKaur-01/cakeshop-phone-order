@@ -38,6 +38,18 @@ Bot: "Awesome, your order is now in our system. Please make a payment on our web
 
 ##Running the App
 
+## Prerequisites
+Let's create all the necessary resources that are needed to run this project. NOte the keys and the comection strinsg as you will need it for the config.
+
+1. Create free Azure account if you do not have one.
+2. Create an ACS resource
+3. Get an ACS phone number
+4. Create an Azure AI multiservice. This will be used for speech to text and vice versa.
+5. Connect ACS resource with Azure AI multiservice resource.
+6. Create an Azure Open AI resurce and deployment. We have used gpt-35-turbo.
+7. Create Azure AI search resource and follow the steps linked here to upload the "cakeshop.doc". This doc is present in xyz location.
+   
+
 ## Local Setup
 
 1. Clone the repository:
