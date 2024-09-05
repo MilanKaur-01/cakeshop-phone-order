@@ -8,33 +8,33 @@ You'll have to either set up the sample locally or deploy it to be able to test 
 ## Sample conversation flow
 
 Bot: "Hello, welcome to Milan cake shop. Are you calling to place an order?" <br />
-Caller: "Yes"
-Bot: "Great! Do you have a flavor in mind, or can I help you find something fruity, chocolaty, or maybe something else?"
-Caller: "I’m thinking of something fruity."
-Bot: "We have Berry Blast"
-Caller: "Nice, tell me more about Berry Blast"
-Bot: " It has velvety berry cream with chunks of fresh fruit. What size would you like? We have 6-inch and 8-inch options for $40 and $50 respectively."
-Caller: "I'll take the 6-inch."
-Bot: "Sure, what will be your pickup date?"
-Caller: "5th September."
-Bot: "Excellent! I am placing your order for a 6-inch Mango Pistachio cake for 5th September. Can you confirm if the details are correct?"
-Caller: "Yes."
-Bot: "Awesome, your order is now in our system. Please make a payment on our website to confirm your order. Goodbye for now."
-
-Bot: "Hello, welcome to Milan cake shop. Are you calling to place an order?"
-Caller: "Yes"
-Bot: "Great! Do you have a flavor in mind, or can I help you find something fruity, chocolaty, or maybe something else?"
-Caller: "what are your seasonal flavors?"
-Bot: "We currently have two seasonal flavors: Autumn Spice and Summer Berry Burst. Do either of those sound good to you?"
-Caller: "What’s in the Autumn Spice?"
-Bot: "Autumn Spice is a warm and cozy spiced cake with hints of cinnamon, nutmeg, and cloves, topped with a maple cream cheese frosting. Would you like to go with that one?"
-Caller: "That sounds delicious! I’ll take it."
-Bot: "Great choice! What size would you like? We have 6-inch and 8-inch options for $35 and $45 respectively."
-Caller: "I’ll go with the 8-inch."
-Bot: "Perfect! And what will be your pickup date?"
-Caller: "September 10th."
-Bot: "Excellent! I’m placing your order for an 8-inch Autumn Spice cake for September 10th. Can you confirm if the details are correct?"
-Caller: "Yes, that’s correct."
+Caller: "Yes" <br />
+Bot: "Great! Do you have a flavor in mind, or can I help you find something fruity, chocolaty, or maybe something else?" <br />
+Caller: "I’m thinking of something fruity." <br />
+Bot: "We have Berry Blast" <br />
+Caller: "Nice, tell me more about Berry Blast" <br />
+Bot: " It has velvety berry cream with chunks of fresh fruit. What size would you like? We have 6-inch and 8-inch options for $40 and $50 respectively." <br />
+Caller: "I'll take the 6-inch." <br />
+Bot: "Sure, what will be your pickup date?" <br />
+Caller: "5th September." <br />
+Bot: "Excellent! I am placing your order for a 6-inch Mango Pistachio cake for 5th September. Can you confirm if the details are correct?" <br />
+Caller: "Yes." <br />
+Bot: "Awesome, your order is now in our system. Please make a payment on our website to confirm your order. Goodbye for now." <br />
+<br />
+Bot: "Hello, welcome to Milan cake shop. Are you calling to place an order?" <br />
+Caller: "Yes" <br />
+Bot: "Great! Do you have a flavor in mind, or can I help you find something fruity, chocolaty, or maybe something else?" <br />
+Caller: "what are your seasonal flavors?" <br />
+Bot: "We currently have two seasonal flavors: Autumn Spice and Summer Berry Burst. Do either of those sound good to you?" <br />
+Caller: "What’s in the Autumn Spice?" <br />
+Bot: "Autumn Spice is a warm and cozy spiced cake with hints of cinnamon, nutmeg, and cloves, topped with a maple cream cheese frosting. Would you like to go with that one?" <br />
+Caller: "That sounds delicious! I’ll take it." <br />
+Bot: "Great choice! What size would you like? We have 6-inch and 8-inch options for $35 and $45 respectively." <br />
+Caller: "I’ll go with the 8-inch." <br />
+Bot: "Perfect! And what will be your pickup date?" <br />
+Caller: "September 10th." <br />
+Bot: "Excellent! I’m placing your order for an 8-inch Autumn Spice cake for September 10th. Can you confirm if the details are correct?" <br />
+Caller: "Yes, that’s correct." <br />
 Bot: "Awesome, your order is now in our system. Please make a payment on our website to confirm your order. Goodbye for now!"
 
 ##Running the App
