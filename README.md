@@ -1,16 +1,16 @@
 # Cake Shop Phone Order Sample
 
-This project is a minimal API for a cake shop phone assistant that helps customers place orders for delicious cakes on a PSTN call. It utilizes various Azure services, including Azure OpenAI, Azure Communication Services, and Azure Cognitive Services, to provide an interactive experience for customers. With Azure OpenAI, the phone assistant can generate natural language responses and provide personalized recommendations. Azure Communication Services enables the integration of PSTN calling capabilities, allowing customers to place orders over the phone. Azure Cognitive Services powers the AI search functionality, making it easy for customers to find their favorite cake flavors and designs. 
+This project is a minimal API for a cake shop phone assistant that helps customers place orders for delicious cakes on a PSTN call. It uses a number of Azure services, including Azure OpenAI, Azure Communication Services, and Azure Cognitive Services, to provide an interactive experience for customers. With Azure OpenAI, the phone assistant can generate natural language responses and provide personalized recommendations. Azure Communication Services enables the integration of PSTN calling capabilities, allowing customers to place orders over the phone. Azure Cognitive Services powers the AI search functionality, making it easy for customers to find their favorite cake flavors and designs. 
 
 ## How to call the cake shop to place an order
 
-You'll have to either set up the sample locally or deploy it to be able to test it out. Once you complete the steps in this ReadMe and have the app running, use your phone to call the Azure Communication Services phone number configured in your resource. The app answers the call and starts talking to you. Go ahead and talk to the assistant to place an order for your favourite cake. Enjoy!
+You'll have to either set up the sample locally or deploy it to be able to test it out. Once you complete the steps in this ReadMe and have the app running, use your phone to call the Azure Communication Services phone number configured in your resource. The app answers the call and starts talking to you. Go ahead and talk to the assistant to place an order for your favorite cake. Enjoy!
 
 ## Sample conversation flow
 
 Bot: "Hello, welcome to Milan cake shop. Are you calling to place an order?" <br />
 Caller: "Yes" <br />
-Bot: "Great! Do you have a flavor in mind, or can I help you find something fruity, chocolaty, or maybe something else?" <br />
+Bot: "Great! Do you have a flavor in mind, or can I help you find something fruity, chocolatey, or maybe something else?" <br />
 Caller: "I’m thinking of something fruity." <br />
 Bot: "We have Berry Blast" <br />
 Caller: "Nice, tell me more about Berry Blast" <br />
@@ -41,7 +41,7 @@ Bot: "Awesome, your order is now in our system. Please make a payment on our web
 ## Running the App
 
 ### Prerequisites
-Let's create all the necessary resources that are needed to run this project. NOte the keys and the comection strinsg as you will need it for the config.
+Let's create all the necessary resources needed to run this project. Note the keys and the connection strings. You need them for the configuration.
 
 1. [Create a free Azure account](https://azure.microsoft.com/free/) if you do not have one.
 2. [Create an Azure Communication Services resource](https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/create-communication-resource).
@@ -49,7 +49,7 @@ Let's create all the necessary resources that are needed to run this project. NO
 4. [Create an Azure AI multiservice](https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource). You need this for speech-to-text and text-to-speech.
 5. [Connect your Azure Communication Services resource with your Azure AI multiservice resource](https://learn.microsoft.com/en-us/azure/communication-services/concepts/call-automation/azure-communication-services-azure-cognitive-services-integration).
 6. [Create and deploy an Azure Open AI resource](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource). This demo uses [gpt-35-turbo](https://learn.microsoft.com/en-us/azure/ai-services/openai/chatgpt-quickstart).
-7. [Create an Azure AI search resource](https://learn.microsoft.com/en-us/azure/search/cognitive-search-quickstart-blob) and follow the steps to upload upload `cakeshop.doc` as the sample file. This document is available present in xyz location.
+7. [Create an Azure AI search resource](https://learn.microsoft.com/en-us/azure/search/cognitive-search-quickstart-blob) and follow the steps to upload `cakeshop.doc` as the sample file. This document is available present in xyz location.
    
 
 ### Local Setup
@@ -61,7 +61,7 @@ Let's create all the necessary resources that are needed to run this project. NO
     cd cakeshopminimalapi
     ```
 
-3. Set up the environment variables:
+2. Set up the environment variables:
 
 Before running the application, make sure to set up the necessary environment variables. These variables are essential for the proper function of the project and enable you to securely store sensitive information.
 
@@ -95,19 +95,19 @@ Remember to keep these environment variables secure and avoid committing them to
     dotnet run
     ```
 
-5. The application runs on localhost on the port mentioned in `launchSettings.json`. `http://localhost:port/swagger`.
+4. The application runs on localhost on the port mentioned in `launchSettings.json`. `http://localhost:port/swagger`.
 
-6. Register your local server into Azure Event Grid.
+5. Register your local server into Azure Event Grid.
 
-This step is required to receive the notifications for incoming call from Azure Communication Services.
+This step is required for the app to receive notifications for incoming calls from Azure Communication Services.
 
-Once you get your devtunnel url (run locally) or web app url running locally (step 4):
-1. From the right panel, select your Azure Communciation Resource, then click **Events**.
+Once you get your devtunnel URL (run locally) or web app URL running locally (step 4):
+1. From the right panel, select your Azure Communication Resource, then click **Events**.
 2. At the top, click **+ Event Subscription**.
-3. In Event Types, filter to to Event Types and choose **Incoming call**.
+3. In Event Types, filter to Event Types and choose **Incoming call**.
 4. In Endpoint details, choose **Webhook**.
 5. Make sure your local server is running before continuing to the next step. Endpoint setup needs to send signals to your server.
-6. Input webhook url as Endpoint, `https://[your server url]/api/event`.
+6. Input webhook URL as Endpoint, `https://[your server URL]/api/event`.
 7. Save the configuration.
 
 
@@ -121,15 +121,15 @@ To deploy this application on Azure, follow these steps:
 
 1. **Create an Azure App Service**:
     - Navigate to the Azure portal and create a new App Service.
-    - Choose the appropriate subscription, resource group, and configure the app name, runtime stack (e.g., .NET 6), and region.
+    - Choose the appropriate subscription, resource group, and configure the app name, runtime stack (such as .NET 6), and region.
 
 2. **Configure Deployment**:
-    - In the App Service, go to the "Deployment Center" and set up continuous deployment using your preferred method (e.g., GitHub, Azure Repos, or local Git).
+    - In the App Service, go to the **Deployment Center** and set up continuous deployment using your preferred method (such as GitHub, Azure Repos, or local Git).
     - Connect your repository and branch to the App Service.
 
-    3. **Set Up Azure Key Vault**:
+3. **Set Up Azure Key Vault**:
     - Create an Azure Key Vault in the Azure portal.
-    - Add the necessary secrets to the Key Vault. These should match the variables used in your `secrets.json` file:
+    - Add the necessary secrets to the Key Vault. These must match the variables used in your `secrets.json` file:
         - `OPENAI_DEPLOYMENT_NAME`
         - `OPENAI_KEY`
         - `OPENAI_ENDPOINT`
@@ -142,22 +142,22 @@ To deploy this application on Azure, follow these steps:
         - `ACS_PHONE_NUMBER`
 
 4. **Grant Access to Key Vault**:
-    - In the Key Vault, go to "Access policies" and grant the App Service managed identity access to the Key Vault.
-    - Ensure the App Service has "Get" permissions for secrets.
+    - In the Key Vault, go to **Access policies** and grant the App Service managed identity access to the Key Vault.
+    - Ensure the App Service has `Get` permission for secrets.
 
 5. **Reference Key Vault Secrets in App Service**:
-    - In the App Service, go to "Configuration" and add the necessary environment variables under the "Application settings" section.
+    - In the App Service, go to **Configuration** and add the necessary environment variables under the **Application settings** section.
     - Use the following format to reference Key Vault secrets:
         ```plaintext
         @Microsoft.KeyVault(SecretUri=https://<your-key-vault-name>.vault.azure.net/secrets/<secret-name>)
         ```
     - For example:
-        - [`OPENAI_DEPLOYMENT_NAME`]: `@Microsoft.KeyVault(SecretUri=https://<your-key-vault-name>.vault.azure.net/secrets/OPENAI_DEPLOYMENT_NAME)`
-        - [`OPENAI_KEY`]: `@Microsoft.KeyVault(SecretUri=https://<your-key-vault-name>.vault.azure.net/secrets/OPENAI_KEY)`
+        - \[`OPENAI_DEPLOYMENT_NAME`\]: `@Microsoft.KeyVault(SecretUri=https://<your-key-vault-name>.vault.azure.net/secrets/OPENAI_DEPLOYMENT_NAME)`
+        - \[`OPENAI_KEY`\]: `@Microsoft.KeyVault(SecretUri=https://<your-key-vault-name>.vault.azure.net/secrets/OPENAI_KEY)`
         - And so on for the other secrets.
 
-3. **Set Environment Variables**:
-    - In the App Service, go to "Configuration" and add the necessary environment variables under the "Application settings" section. These should match the variables used in your `secrets.json` file:
+6. **Set Environment Variables**:
+    - In the App Service, go to **Configuration** and add the necessary environment variables under the **Application settings** section. These must match the variables used in your `secrets.json` file:
         - `OPENAI_DEPLOYMENT_NAME`
         - `OPENAI_KEY`
         - `OPENAI_ENDPOINT`
@@ -169,21 +169,20 @@ To deploy this application on Azure, follow these steps:
         - `CALLBACK_URI`
         - `ACS_PHONE_NUMBER`
 
-4. **Deploy the Application**:
+7. **Deploy the Application**:
     - Once the deployment configuration is set, trigger a deployment from your repository.
     - Monitor the deployment process in the **Deployment Center** to ensure it completes successfully.
 
-5. **Register the Callback URI**:
+8. **Register the Callback URI**:
     - After deployment, update the `CALLBACK_URI` environment variable with the live URL of your deployed application.
     - Register this URL in the Azure Communication Services Event Grid as described in the installation steps for local run.
 
-6. **Access the Application**:
+9. **Access the Application**:
 - Once deployed, you can access your application via the Azure App Service URL. The API documentation should be available at `https://<your-app-service-name>.azurewebsites.net/swagger`.
-
 
 **Note:**
 
-This sample demonstrates how to integrate PSTN calling functions into your AI applications using Azure Communication Services alongside Azure OpenAI and Azure AI Search. While testing this sample, you’ll find the assistant helpful for most parts of the conversation and capable of placing and taking orders. However, for more complex interactions, the AI assistant may be less than perfect. That's because the focus of this sample is primarily to show how how straightforward it can be to integrate Azure Communication Services PSTN calling into your RAG (Retrieve, Augment, and Generate) or AI applications. For best practices in writing prompts or handling chat completions, see the [OpenAI](https://platform.openai.com/docs/concepts) or [Azure OpenAI](https://learn.microsoft.com/en-us/azure/ai-services/openai/) documentation.
+This sample demonstrates how to integrate PSTN calling functions into your AI applications using Azure Communication Services alongside Azure OpenAI and Azure AI Search. While testing this sample, you’ll find the assistant helpful for most parts of the conversation and capable of placing and taking orders. However, for more complex interactions, the AI assistant may be less than perfect. That's because the focus of this sample is primarily to show how straightforward it can be to integrate Azure Communication Services PSTN calling into your RAG (Retrieve, Augment, and Generate) or AI applications. For best practices in writing prompts or handling chat completions, see the [OpenAI](https://platform.openai.com/docs/concepts) or [Azure OpenAI](https://learn.microsoft.com/en-us/azure/ai-services/openai/) documentation.
 
 ## Contributing
 
