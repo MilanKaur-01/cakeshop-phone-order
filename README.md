@@ -3,7 +3,8 @@
 This project is a minimal API for a cake shop phone assistant that helps customers place orders for delicious cakes on a PSTN call. It utilizes various Azure services, including Azure OpenAI, Azure Communication Services, and Azure Cognitive Services, to provide an interactive experience for customers. With Azure OpenAI, the phone assistant can generate natural language responses and provide personalized recommendations. Azure Communication Services enables the integration of PSTN calling capabilities, allowing customers to place orders over the phone. Azure Cognitive Services powers the AI search functionality, making it easy for customers to find their favorite cake flavors and designs. 
 
 ## How to call the cake shop to place an order
-You'll have to either set up the sample locally or deploy it to be able to test it out. Once you follow the steps below and have the app running, call on the ACS phone number configured in your resource from your phone. The app will pick it up and start talking to you. Go on - talk to the assistant to place an order for your favourite cake. Enjoy!
+
+You'll have to either set up the sample locally or deploy it to be able to test it out. Once you complete the steps in this ReadMe and have the app running, use your phone to call the Azure Communication Services phone number configured in your resource. The app answers the call and starts talking to you. Go ahead and talk to the assistant to place an order for your favourite cake. Enjoy!
 
 ## Sample conversation flow
 
@@ -39,31 +40,32 @@ Bot: "Awesome, your order is now in our system. Please make a payment on our web
 
 ## Running the App
 
-## Prerequisites
+### Prerequisites
 Let's create all the necessary resources that are needed to run this project. NOte the keys and the comection strinsg as you will need it for the config.
 
-1. Create free Azure account if you do not have one.
-2. Create an ACS resource
-3. Get an ACS phone number
-4. Create an Azure AI multiservice. This will be used for speech to text and vice versa.
-5. Connect ACS resource with Azure AI multiservice resource.
-6. Create an Azure Open AI resurce and deployment. We have used gpt-35-turbo.
-7. Create Azure AI search resource and follow the steps linked here to upload the "cakeshop.doc". This doc is present in xyz location.
+1. [Create a free Azure account](https://azure.microsoft.com/free/) if you do not have one.
+2. [Create an Azure Communication Services resource](https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/create-communication-resource).
+3. [Get an Azure Communication Services phone number](https://learn.microsoft.com/en-us/azure/communication-services/quickstarts/telephony/get-phone-number).
+4. [Create an Azure AI multiservice](https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource). You need this for speech-to-text and text-to-speech.
+5. [Connect your Azure Communication Services resource with your Azure AI multiservice resource](https://learn.microsoft.com/en-us/azure/communication-services/concepts/call-automation/azure-communication-services-azure-cognitive-services-integration).
+6. [Create and deploy an Azure Open AI resource](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource). This demo uses [gpt-35-turbo](https://learn.microsoft.com/en-us/azure/ai-services/openai/chatgpt-quickstart).
+7. [Create an Azure AI search resource](https://learn.microsoft.com/en-us/azure/search/cognitive-search-quickstart-blob) and follow the steps to upload upload `cakeshop.doc` as the sample file. This document is available present in xyz location.
    
 
-## Local Setup
+### Local Setup
 
 1. Clone the repository:
+
     ```bash
     git clone https://github.com/yourusername/cakeshopminimalapi.git
     cd cakeshopminimalapi
     ```
 
-2. Set up the environment variables:
+3. Set up the environment variables:
 
-Before running the application, make sure to set up the necessary environment variables. These variables are essential for the proper functioning of the project and allow you to securely store sensitive information.
+Before running the application, make sure to set up the necessary environment variables. These variables are essential for the proper function of the project and enable you to securely store sensitive information.
 
-To set up the environment variables, you can use the `dotnet user-secrets` command. This command allows you to store and retrieve sensitive data securely during development without exposing it in your codebase or version control system.
+To set up the environment variables, you can use the `dotnet user-secrets` command. This command enables you to store and retrieve sensitive data securely during development without exposing it in your codebase or version control system.
 
 To set up the environment variables using `dotnet user-secrets`, follow these steps:
 
@@ -87,30 +89,33 @@ Make sure to replace the placeholder values with the actual credentials and endp
 Remember to keep these environment variables secure and avoid committing them to version control systems to prevent unauthorized access to your resources.
 
 3. Build and run the application using CLI or run directly through your IDE.
+
     ```bash
     dotnet build
     dotnet run
     ```
 
-4. The application will open up on localhost on the port mentioned in launchSettings.json. `http://localhost:port/swagger`.
+5. The application runs on localhost on the port mentioned in `launchSettings.json`. `http://localhost:port/swagger`.
 
-5. Register your local server into event grid
-This step is required to receive the notifications for incoming call from ACS.
+6. Register your local server into Azure Event Grid.
 
-Once you get your devtunnel url(run locally) or web app url running locally (step 4):
-1. click your Azure Communciation Resource, on the right panel, click Events.
-2. click "+ Event Subscription" on the top
-3. In event types - Filter to Event Types, choose incoming call
-4. In Endpoint details, choose Webhook
-5. Make sure your local server is running before go next step, Endpoint setup needs to send signals to your server
-6. Input webhook url as Endpoint, https://[your server url]/api/event
-7. Save the config
+This step is required to receive the notifications for incoming call from Azure Communication Services.
+
+Once you get your devtunnel url (run locally) or web app url running locally (step 4):
+1. From the right panel, select your Azure Communciation Resource, then click **Events**.
+2. At the top, click **+ Event Subscription**.
+3. In Event Types, filter to to Event Types and choose **Incoming call**.
+4. In Endpoint details, choose **Webhook**.
+5. Make sure your local server is running before continuing to the next step. Endpoint setup needs to send signals to your server.
+6. Input webhook url as Endpoint, `https://[your server url]/api/event`.
+7. Save the configuration.
 
 
-Steps to create devtunnel
-If you are using Visual studio, you can create a devtunnel for your project in the IDE. Follow steps here.
+### Steps to create devtunnel
 
-## Deployment on Azure
+If you are using Visual Studio, you can create a devtunnel for your project in the IDE. Follow these steps.
+
+### Deployment on Azure
 
 To deploy this application on Azure, follow these steps:
 
@@ -166,7 +171,7 @@ To deploy this application on Azure, follow these steps:
 
 4. **Deploy the Application**:
     - Once the deployment configuration is set, trigger a deployment from your repository.
-    - Monitor the deployment process in the "Deployment Center" to ensure it completes successfully.
+    - Monitor the deployment process in the **Deployment Center** to ensure it completes successfully.
 
 5. **Register the Callback URI**:
     - After deployment, update the `CALLBACK_URI` environment variable with the live URL of your deployed application.
@@ -178,54 +183,12 @@ To deploy this application on Azure, follow these steps:
 
 **Note:**
 
-This sample is intended to demonstrate how to integrate PSTN calling functionality into your AI applications using Azure Communication Services (ACS) alongside Azure OpenAI and Azure AI Search. While testing this sample, you’ll find the assistant helpful for most parts of the conversation and capable of placing and taking orders. However, for some more complex interactions, the AI assistant may be less than perfect. That's because the focus of this sample is primarily to show how how straightforward it can be to integrate ACS PSTN calling into your RAG (Retrieve, Augment, and Generate) or AI applications. For best practices in writing prompts or handling chat completions, please refer to the OpenAI or Azure OpenAI documentation.
+This sample demonstrates how to integrate PSTN calling functions into your AI applications using Azure Communication Services alongside Azure OpenAI and Azure AI Search. While testing this sample, you’ll find the assistant helpful for most parts of the conversation and capable of placing and taking orders. However, for more complex interactions, the AI assistant may be less than perfect. That's because the focus of this sample is primarily to show how how straightforward it can be to integrate Azure Communication Services PSTN calling into your RAG (Retrieve, Augment, and Generate) or AI applications. For best practices in writing prompts or handling chat completions, see the [OpenAI](https://platform.openai.com/docs/concepts) or [Azure OpenAI](https://learn.microsoft.com/en-us/azure/ai-services/openai/) documentation.
 
 ## Contributing
 
-Please fork the repository and submit pull requests for any enhancements or bug fixes.
+Fork the repository and submit pull requests for any enhancements or bug fixes.
 
 ## License
 
 This project is licensed under the MIT License.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
