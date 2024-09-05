@@ -37,7 +37,7 @@ Bot: "Excellent! I’m placing your order for an 8-inch Autumn Spice cake for Se
 Caller: "Yes, that’s correct." <br />
 Bot: "Awesome, your order is now in our system. Please make a payment on our website to confirm your order. Goodbye for now!"
 
-##Running the App
+## Running the App
 
 ## Prerequisites
 Let's create all the necessary resources that are needed to run this project. NOte the keys and the comection strinsg as you will need it for the config.
