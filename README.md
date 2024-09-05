@@ -6,7 +6,8 @@ This project is a minimal API for a cake shop phone assistant that helps custome
 You'll have to either set up the sample locally or deploy it to be able to test it out. Once you follow the steps below and have the app running, call on the ACS phone number configured in your resource from your phone. The app will pick it up and start talking to you. Go on - talk to the assistant to place an order for your favourite cake. Enjoy!
 
 ## Sample conversation flow
-Bot: "Hello, welcome to Milan cake shop. Are you calling to place an order?"
+
+Bot: "Hello, welcome to Milan cake shop. Are you calling to place an order?" <br />
 Caller: "Yes"
 Bot: "Great! Do you have a flavor in mind, or can I help you find something fruity, chocolaty, or maybe something else?"
 Caller: "I’m thinking of something fruity."
