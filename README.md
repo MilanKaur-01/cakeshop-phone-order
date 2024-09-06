@@ -49,7 +49,7 @@ Let's create all the necessary resources needed to run this project. Note the ke
 4. [Create an Azure AI multiservice](https://learn.microsoft.com/en-us/azure/ai-services/multi-service-resource). You need this for speech-to-text and text-to-speech.
 5. [Connect your Azure Communication Services resource with your Azure AI multiservice resource](https://learn.microsoft.com/en-us/azure/communication-services/concepts/call-automation/azure-communication-services-azure-cognitive-services-integration).
 6. [Create and deploy an Azure Open AI resource](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource). This demo uses [gpt-35-turbo](https://learn.microsoft.com/en-us/azure/ai-services/openai/chatgpt-quickstart).
-7. [Create an Azure AI search resource](https://learn.microsoft.com/en-us/azure/search/cognitive-search-quickstart-blob) and follow the steps to upload `cakeshop.doc` as the sample file. This document is available present in xyz location.
+7. [Create an Azure AI search resource](https://learn.microsoft.com/en-us/azure/search/cognitive-search-quickstart-blob) and follow the steps to upload `cakeshop.doc` as the sample file. This document is available present in cakeShopMinimalApi/docs/ location.
    
 
 ### Local Setup
@@ -113,7 +113,15 @@ Once you get your devtunnel URL (run locally) or web app URL running locally (st
 
 ### Steps to create devtunnel
 
-If you are using Visual Studio, you can create a devtunnel for your project in the IDE. Follow these steps.
+Option 1 : If you are using Visual Studio, you can create a devtunnel for your project in the IDE. [Follow these steps](https://learn.microsoft.com/en-us/aspnet/core/test/dev-tunnels?view=aspnetcore-8.0#create-a-tunnel).
+
+Option 2: You can create a dev tunnel by running these commands from your command prompt as well.
+
+```bash
+devtunnel create --allow-anonymous
+devtunnel port create -p 8080
+devtunnel host
+```
 
 ### Deployment on Azure
 
