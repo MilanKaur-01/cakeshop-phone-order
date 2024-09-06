@@ -165,7 +165,7 @@ app.MapPost("/api/callbacks/{contextId}", async (CloudEvent[] cloudEvents, ILogg
                             continue;
                         }
 
-                         
+                        gptBuffer.Append(item.Text); 
                         if (sentenceSaperators.Any(item.Text.Contains))
                         {
                             var sentence = Regex.Replace(gptBuffer.ToString().Trim(), @"\[doc\d+\]", string.Empty);
