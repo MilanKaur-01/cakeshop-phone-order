@@ -2,16 +2,22 @@
 using Azure.AI.OpenAI.Chat;
 using Azure.Communication;
 using Azure.Communication.CallAutomation;
+using Azure.Communication.Sms;
 using Azure.Messaging;
+using Azure.Messaging.EventGrid;
+using Azure.Messaging.EventGrid.SystemEvents;
 using cakeShopMinimalApi;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using OpenAI.Chat;
 using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text;
-using Azure.Messaging.EventGrid.SystemEvents;
-using Azure.Messaging.EventGrid;
 using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +27,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 var config = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .AddEnvironmentVariables()
@@ -29,6 +34,7 @@ var config = new ConfigurationBuilder()
     ?? throw new InvalidOperationException("Configuration is not provided.");
 
 var aiDeploymentName = config["OPENAI_DEPLOYMENT_NAME"] ?? throw new InvalidOperationException("OPENAI_DEPLOYMENT_NAME is not provided.");
+var openAIModel = config["OPENAI_MODEL"] ?? throw new InvalidOperationException("OPENAI_MODEL is not provided.");
 var openAIAPIKey = config["OPENAI_KEY"] ?? throw new InvalidOperationException("OPENAI_KEY is not provided.");
 var openAIUrl = config["OPENAI_ENDPOINT"] ?? throw new InvalidOperationException("OPENAI_ENDPOINT is not provided.");
 
@@ -59,6 +65,12 @@ options.AddDataSource(new AzureSearchChatDataSource()
     IndexName = aiSearchIndex,
     Authentication = DataSourceAuthentication.FromApiKey(aiSearchKey)
 });
+
+Kernel kernel = Kernel.CreateBuilder()
+    .AddOpenAIChatCompletion(openAIModel, openAIAPIKey)
+    .Build();
+
+kernel.Plugins.AddFromObject(new CakeOrderPlugin(acsConnectionString, caller.ToString()), "CakeOrderPlugin");
 
 var app = builder.Build();
 
@@ -147,12 +159,23 @@ app.MapPost("/api/callbacks/{contextId}", async (CloudEvent[] cloudEvents, ILogg
             if (parsedEvent is RecognizeCompleted recogEvent
                 && recogEvent.RecognizeResult is SpeechResult speech_result)
             {
-                 chatHistoryCache[contextId].Add(new UserChatMessage(speech_result.Speech));
+                chatHistoryCache[contextId].Add(new UserChatMessage(speech_result.Speech));
                 chatHistoryCache[contextId].Add(new UserChatMessage (Helper.reminderprompt));
 
+                var function = await SelectOpenAIFuntion(speech_result.Speech);
+
+                if (function != null)
+                {
+                    kernel.Plugins.TryGetFunctionAndArguments(function, out KernelFunction? kernelFunction,
+                        out KernelArguments? kernelArguments);
+
+                    // adds customer phone number to arguments
+                    kernelArguments?.TryAdd("customerPhoneNumber", callerId);
+
+                    var result = await kernel.InvokeAsync(kernelFunction!, kernelArguments);
+                }
 
                 // calling Azure Open AI to get a response for the user based on the conversation history, knowledgebase and the system prompt
-
                 StringBuilder gptBuffer = new();
 
                 await foreach (StreamingChatCompletionUpdate update in chatClient.CompleteChatStreamingAsync(chatHistoryCache[contextId], options))
@@ -213,4 +236,16 @@ async Task SayAndRecognizeAsync(CallMedia callConnectionMedia, PhoneNumberIdenti
     var recognize_result = await callConnectionMedia.StartRecognizingAsync(recognizeOptions);
 }
 
+async Task<OpenAIFunctionToolCall?> SelectOpenAIFuntion(string prompt)
+{
+    var chatCompletionService = new AzureOpenAIChatCompletionService(aiDeploymentName, _aiClient!);
+    var result = await chatCompletionService.GetChatMessageContentAsync(new ChatHistory(prompt),
+        new OpenAIPromptExecutionSettings()
+        {
+            ToolCallBehavior = ToolCallBehavior.EnableKernelFunctions,
+            Temperature = 0
+        }, kernel);
+    var functionCall = ((OpenAIChatMessageContent)result).GetOpenAIFunctionToolCalls().FirstOrDefault();
 
+    return functionCall;
+}
