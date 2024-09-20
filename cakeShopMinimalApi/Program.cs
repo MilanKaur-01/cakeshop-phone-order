@@ -2,13 +2,11 @@
 using Azure.AI.OpenAI.Chat;
 using Azure.Communication;
 using Azure.Communication.CallAutomation;
-using Azure.Communication.Sms;
 using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using Azure.Messaging.EventGrid.SystemEvents;
 using cakeShopMinimalApi;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
@@ -34,7 +32,7 @@ var config = new ConfigurationBuilder()
     ?? throw new InvalidOperationException("Configuration is not provided.");
 
 var aiDeploymentName = config["OPENAI_DEPLOYMENT_NAME"] ?? throw new InvalidOperationException("OPENAI_DEPLOYMENT_NAME is not provided.");
-var openAIModel = config["OPENAI_MODEL"] ?? throw new InvalidOperationException("OPENAI_MODEL is not provided.");
+var openAIModelName = config["OPENAI_MODEL_NAME"] ?? throw new InvalidOperationException("OPENAI_MODEL_NAME is not provided.");
 var openAIAPIKey = config["OPENAI_KEY"] ?? throw new InvalidOperationException("OPENAI_KEY is not provided.");
 var openAIUrl = config["OPENAI_ENDPOINT"] ?? throw new InvalidOperationException("OPENAI_ENDPOINT is not provided.");
 
@@ -67,7 +65,7 @@ options.AddDataSource(new AzureSearchChatDataSource()
 });
 
 Kernel kernel = Kernel.CreateBuilder()
-    .AddOpenAIChatCompletion(openAIModel, openAIAPIKey)
+    .AddOpenAIChatCompletion(openAIModelName, openAIAPIKey)
     .Build();
 
 kernel.Plugins.AddFromObject(new CakeOrderPlugin(acsConnectionString, caller.ToString()), "CakeOrderPlugin");
