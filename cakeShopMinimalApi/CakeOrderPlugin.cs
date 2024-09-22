@@ -23,11 +23,11 @@ namespace cakeShopMinimalApi
         }
 
         [KernelFunction, Description("Add cake order to system and send an SMS confirmation")]
-        public async Task AddCakeOrder(
-            [Description("The cake flavour, e.g. Velvet Indulgence, Choco Lover's Dream")] CakeFlavour? cakeFlavour = null,
-            [Description("The cake size, e.g. 6 inches, 8 inches")] CakeSize? cakeSize = null,
-            [Description("The cake price, e.g. 35, 65")] int? cakePrice = null,
-            [Description("Customer phone number, e.g. +11234567890")] string? customerPhoneNumber = null
+        public async Task<string> AddCakeOrder(
+            [Description("The cake flavour, e.g. Velvet Indulgence, Choco Lover's Dream")] CakeFlavour cakeFlavour,
+            [Description("The cake size, e.g. 6 inches, 8 inches")] CakeSize cakeSize,
+            [Description("The cake price, e.g. 35, 65")] int cakePrice,
+            [Description("The customer's phone number")] string? customerPhoneNumber = null
         )
         {
             var cake = new Cake()
@@ -40,24 +40,28 @@ namespace cakeShopMinimalApi
             await cakeDb.Cakes.AddAsync(cake);
             await cakeDb.SaveChangesAsync();
 
+            string orderReference = "CAKE_" + cake.Id.ToString();
+
             if (customerPhoneNumber != null)
             {
-                var orderMessage = "Thank you for ordering " + cake.CakeSize.ToString() + " inches " + cake.CakeFalvour.ToString() + " cake from Milan CakeShop. Here's you order reference#: " + cake.Id.ToString();
+                var orderMessage = "Thank you for ordering " + cake.CakeSize.ToString() + " inches " + cake.CakeFalvour.ToString() + " cake from Milan CakeShop. Here's you order reference#: " + orderReference;
                 await SendOrderConfirmation(customerPhoneNumber, orderMessage);
             }
+
+            return orderReference;
         }
 
         [KernelFunction, Description("Gets cake order information from the system")]
         public async Task<Cake?> GetCakeOrder(
-            [Description("The cake order reference Number, e.g. 1234")] int cakeId
+            [Description("The cake order reference Number, e.g. CAKE_1234")] string cakeId
         )
         {   
-            return await cakeDb.Cakes.FindAsync(cakeId);
+            return await cakeDb.Cakes.FindAsync(cakeId.Replace("CAKE_", ""));
         }
 
         [KernelFunction, Description("Update cake order information in the system and send an SMS confirmation")]
         public async Task UpdateCakeOrder(
-            [Description("The cake order reference Number, e.g. 1234")] int cakeId,
+            [Description("The cake order reference Number, e.g. CAKE_1234")] string cakeId,
             [Description("The cake flavour, e.g. Velvet Indulgence, Choco Lover's Dream")] CakeFlavour? cakeFlavour = null,
             [Description("The cake size, e.g. 6 inches, 8 inches")] CakeSize? cakeSize = null,
             [Description("The cake price, e.g. 35, 65")] int? cakePrice = null,
@@ -71,7 +75,7 @@ namespace cakeShopMinimalApi
                 CakePrice = cakePrice
             };
 
-            var cake = await cakeDb.Cakes.FindAsync(cakeId);
+            var cake = await cakeDb.Cakes.FindAsync(cakeId.Replace("CAKE_", ""));
             if (cake != null)
             {
                 cake.CakeFalvour = updateCake.CakeFalvour;
@@ -81,7 +85,7 @@ namespace cakeShopMinimalApi
 
                 if (customerPhoneNumber != null)
                 {
-                    var orderMessage = "Thank you for ordering " + cake.CakeSize.ToString() + " inches " + cake.CakeFalvour.ToString() + " cake from Milan CakeShop. Here's you order reference#: " + cake.Id.ToString();
+                    var orderMessage = "Thank you for ordering " + cake.CakeSize.ToString() + " inches " + cake.CakeFalvour.ToString() + " cake from Milan CakeShop. Here's you order reference#: CAKE_" + cake.Id;
                     await SendOrderConfirmation(customerPhoneNumber, orderMessage);
                 }
             }
@@ -89,11 +93,11 @@ namespace cakeShopMinimalApi
 
         [KernelFunction, Description("Cancels cake order from system and send an SMS confirmation")]
         public async Task CancelCakeOrder(
-            [Description("The cake order reference Number, e.g. 1234")] int cakeId,
+            [Description("The cake order reference Number, e.g. CAKE_1234")] string cakeId,
             [Description("Customer phone number, e.g. +11234567890")] string? customerPhoneNumber = null
         )
         {
-            var cake = await cakeDb.Cakes.FindAsync(cakeId);
+            var cake = await cakeDb.Cakes.FindAsync(cakeId.Replace("CAKE_", ""));
             if (cake != null)
             {
                 cakeDb.Cakes.Remove(cake);
@@ -101,7 +105,7 @@ namespace cakeShopMinimalApi
 
                 if (customerPhoneNumber != null)
                 {
-                    var orderMessage = "Your order for " + cake.CakeSize.ToString() + " inches " + cake.CakeFalvour.ToString() + " cake from Milan CakeShop has been cancelled. Here's you order reference#: " + cake.Id.ToString();
+                    var orderMessage = "Your order for " + cake.CakeSize.ToString() + " inches " + cake.CakeFalvour.ToString() + " cake from Milan CakeShop has been cancelled. Here's you order reference#: CAKE_" + cake.Id;
                     await SendOrderConfirmation(customerPhoneNumber, orderMessage);
                 }
             }
@@ -109,11 +113,12 @@ namespace cakeShopMinimalApi
 
         private async Task SendOrderConfirmation(string customerPhoneNumber, string orderMessage)
         {
+            // do something
             await smsClient.SendAsync(
                 from: cakeShopPhoneNumber,
                 to: customerPhoneNumber,
                 message: orderMessage
-    );
+            );
         }
     }
 }

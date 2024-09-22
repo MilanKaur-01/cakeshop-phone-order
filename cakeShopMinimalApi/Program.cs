@@ -6,6 +6,7 @@ using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using Azure.Messaging.EventGrid.SystemEvents;
 using cakeShopMinimalApi;
+using cakeShopMinimalApi.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
@@ -135,6 +136,7 @@ app.MapPost("/api/callbacks/{contextId}", async (CloudEvent[] cloudEvents, ILogg
             var parsedEvent = CallAutomationEventParser.Parse(cloudEvent);
             logger.LogInformation($"{parsedEvent?.GetType().Name} parsedEvent received for call connection id: {parsedEvent?.CallConnectionId}");
             var callConnection = callAutomationClient.GetCallConnection(parsedEvent.CallConnectionId);
+            chatHistoryCache[contextId].Add(new UserChatMessage("Reminder: You as AI assitant for Milan cake shop know the customer's number is " + callerId + " and will send a text with order confirmation when an order is placed in the system"));
 
             if (parsedEvent is CallConnected)
             {
@@ -158,7 +160,7 @@ app.MapPost("/api/callbacks/{contextId}", async (CloudEvent[] cloudEvents, ILogg
                 && recogEvent.RecognizeResult is SpeechResult speech_result)
             {
                 chatHistoryCache[contextId].Add(new UserChatMessage(speech_result.Speech));
-                chatHistoryCache[contextId].Add(new UserChatMessage (Helper.reminderprompt));
+                chatHistoryCache[contextId].Add(new UserChatMessage(Helper.reminderprompt));
 
                 var function = await SelectOpenAIFuntion(speech_result.Speech);
 
@@ -168,9 +170,22 @@ app.MapPost("/api/callbacks/{contextId}", async (CloudEvent[] cloudEvents, ILogg
                         out KernelArguments? kernelArguments);
 
                     // adds customer phone number to arguments
-                    kernelArguments?.TryAdd("customerPhoneNumber", callerId);
+                    if (kernelArguments.ContainsName("customerPhoneNumber"))
+                    {
+                        kernelArguments["customerPhoneNumber"] = callerId;
+                    }
+                    else
+                    {
+                        kernelArguments?.TryAdd("customerPhoneNumber", callerId);
+                    }
 
                     var result = await kernel.InvokeAsync(kernelFunction!, kernelArguments);
+                    var orderReference = result.GetValue<string>();
+
+                    if (orderReference != null)
+                    {
+                        chatHistoryCache[contextId].Add(new UserChatMessage(Helper.orderPlacedPrompt + orderReference.ToString()));
+                    }
                 }
 
                 // calling Azure Open AI to get a response for the user based on the conversation history, knowledgebase and the system prompt

@@ -44,5 +44,7 @@
             "Bot: \"Awesome, blossom. Yous order is now in our system. Please make a payment on our website to confirm your order. Goodbye for now\"";
 
         public static string reminderprompt = "Reminder : You are an AI assitant for Milan cake shop and your goal is to place an order for a cake or cakes in the system for the customer. After placing the order, you let themknow it's in the system, thank them and say goodbye.";
+
+        public static string orderPlacedPrompt = "Reminder: You as AI assitant for Milan cake shop has placed the order in system and will let the customer know that the order reference is ";
     }   
 }
