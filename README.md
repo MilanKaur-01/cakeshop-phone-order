@@ -73,6 +73,7 @@ To set up the environment variables using `dotnet user-secrets`, follow these st
 - Run the following command to set the environment variables:
     ```bash
     dotnet user-secrets set "OPENAI_DEPLOYMENT_NAME" "your_openai_deployment_name"
+    dotnet user-secrets set "OPENAI_MODEL_Name" "your_openai_model_name"
     dotnet user-secrets set "OPENAI_KEY" "your_openai_key"
     dotnet user-secrets set "OPENAI_ENDPOINT" "your_openai_endpoint"
     dotnet user-secrets set "AI_SEARCH_KEY" "your_ai_search_key"
@@ -139,6 +140,7 @@ To deploy this application on Azure, follow these steps:
     - Create an Azure Key Vault in the Azure portal.
     - Add the necessary secrets to the Key Vault. These must match the variables used in your `secrets.json` file:
         - `OPENAI_DEPLOYMENT_NAME`
+        - `OPENAI_MODEL_NAME`
         - `OPENAI_KEY`
         - `OPENAI_ENDPOINT`
         - `AI_SEARCH_KEY`
@@ -167,6 +169,7 @@ To deploy this application on Azure, follow these steps:
 6. **Set Environment Variables**:
     - In the App Service, go to **Configuration** and add the necessary environment variables under the **Application settings** section. These must match the variables used in your `secrets.json` file:
         - `OPENAI_DEPLOYMENT_NAME`
+        - `OPENAI_MODEL_NAME`
         - `OPENAI_KEY`
         - `OPENAI_ENDPOINT`
         - `AI_SEARCH_KEY`
